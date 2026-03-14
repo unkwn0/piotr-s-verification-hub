@@ -219,8 +219,8 @@ const AnalyticsView = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Table */}
-        <div className="border border-border bg-card p-6 mt-px">
+        {/* Table - Desktop */}
+        <div className="border border-border bg-card p-6 mt-px hidden md:block">
           <div className="font-mono uppercase text-xs text-muted-foreground mb-4">
             Recent Verifications
           </div>
@@ -281,6 +281,63 @@ const AnalyticsView = () => {
                 })}
               </tbody>
             </table>
+          </div>
+        </div>
+
+        {/* Cards - Mobile */}
+        <div className="border border-border bg-card p-0 mt-px block md:hidden">
+          <div className="font-mono uppercase text-xs text-muted-foreground p-4 border-b border-border">
+            Recent Verifications
+          </div>
+          <div className="bg-border">
+            {recentData.map((row, i) => {
+              const vc = verdictColor[row.verdict] || "#71717a";
+              return (
+                <div
+                  key={i}
+                  className="border border-border bg-card p-4 mb-px last:mb-0"
+                >
+                  {/* Top row: date + verdict badge */}
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-mono text-xs text-muted-foreground">
+                      {row.date}
+                    </span>
+                    <span
+                      className="font-mono text-xs px-2 py-0.5 border"
+                      style={{ borderColor: vc, color: vc }}
+                    >
+                      {row.verdict}
+                    </span>
+                  </div>
+
+                  {/* Claim - line clamp 2 */}
+                  <p className="text-sm text-foreground line-clamp-2 mb-3">
+                    {row.claim}
+                  </p>
+
+                  {/* Bottom row: category tag + confidence */}
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs uppercase border border-border px-2 py-0.5">
+                      {row.category}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs text-muted-foreground">
+                        {row.confidence}%
+                      </span>
+                      <div className="w-16 h-1.5 bg-muted">
+                        <div
+                          className="h-full"
+                          style={{
+                            width: `${row.confidence}%`,
+                            backgroundColor: vc,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
