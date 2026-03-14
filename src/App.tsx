@@ -1,27 +1,36 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import { LangProvider } from "@/contexts/LangContext";
+import { ViewProvider, useView } from "@/contexts/ViewContext";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import HomeView from "@/components/views/HomeView";
+import ProjectsView from "@/components/views/ProjectsView";
+import AnalyticsView from "@/components/views/AnalyticsView";
+import VerifyView from "@/components/views/VerifyView";
+import ContactView from "@/components/views/ContactView";
 
-const queryClient = new QueryClient();
+const ViewSwitch = () => {
+  const { view } = useView();
+  switch (view) {
+    case "home": return <HomeView />;
+    case "projects": return <ProjectsView />;
+    case "analytics": return <AnalyticsView />;
+    case "verify": return <VerifyView />;
+    case "contact": return <ContactView />;
+  }
+};
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <LangProvider>
+    <ViewProvider>
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-1 pt-14">
+          <ViewSwitch />
+        </main>
+        <Footer />
+      </div>
+    </ViewProvider>
+  </LangProvider>
 );
 
 export default App;
